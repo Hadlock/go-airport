@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		
+		<title>UpGuard Rebound v0.0.1</title>
+
+		<link href="assets/css/bootstrap.min.css" rel="stylesheet">
+		<link href="assets/css/bootstrap-theme.min.css" rel="stylesheet">		
+	</head>
+	<body role="application">
+		<nav class="navbar navbar-inverse navbar-static-top">
+			<div class="container">
+				<div class="navbar-header">
+					<a class="navbar-brand" href="#">UpGuard Rebound v0.0.1</a>
+				</div>
+			</div>
+		</nav>
+		<div class="container" role="main">
+			<div class="row">
+				<div id="docker-containers" class="panel panel-primary">
+					<div class="panel-heading">
+						<h3 class="panel-title">Container status</h3>
+					</div>
+					<div class="panel-body">
+							<table id="docker-table" class="table table-striped hidden">
+									<thead>
+											<tr>
+													<th>ID</th>
+													<th>Name</th>
+													<th>Image</th>
+													<th>Status</th>
+													<th>Time</th>
+											</tr>
+									</thead>
+							</table>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div id="fleet-units" class="panel panel-primary">
+					<div class="panel-heading">
+						<h3 class="panel-title">Unit status</h3>
+					</div>
+					<div class="panel-body">
+							<table id="fleet-table" class="table table-striped hidden">
+							</table>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<script src="assets/js/jquery-1.12.2.min.js"></script>
+		<script src="assets/js/appstatus.js"></script>
+		<script>
+		 $(document).ready(function () {
+				 $.getJSON("/docker/containers", populateDockerStats).
+					 fail(function () {
+							 $("#docker-containers .panel-body").
+																			append('<div id="docker-failure" class="alert alert-warning">Unable to communicate with the container API.</p>');
+					 });
+				 
+				 $.getJSON("/fleet/units", populateFleetUnits).
+					 fail(function () {
+							 $("#fleet-units .panel-body").
+																append('<div id="fleet-failure" class="alert alert-warning">Unable to communicate with the units API.</p>')
+					 });
+			})
+		</script>		
+	</body>	
+</html>
